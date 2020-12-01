@@ -54,6 +54,7 @@ func main() {
 	fmt.Println(sumOfThree)
 }
 
+// part 1
 func findTwoNumsWithSum(input []int, sum int) (int, error) {
 	seen := make(map[int]bool)
 
@@ -68,6 +69,7 @@ func findTwoNumsWithSum(input []int, sum int) (int, error) {
 	return 0, errors.New("no pair found")
 }
 
+// part 2
 func findThreeNumsWithSum(input []int, sum int) (int, error) {
 	for i, num := range input {
 		expected := sum - num
