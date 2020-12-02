@@ -25,12 +25,12 @@ func main() {
 	scanner := bufio.NewScanner(f)
 
 	for scanner.Scan() {
-		val, err := strconv.Atoi(strings.TrimSpace(scanner.Text()))
+		line, err := strconv.Atoi(strings.TrimSpace(scanner.Text()))
 
 		if err != nil {
 			log.Fatal(err)
 		}
-		numList = append(numList, val)
+		numList = append(numList, line)
 	}
 
 	if err := scanner.Err(); err != nil {
