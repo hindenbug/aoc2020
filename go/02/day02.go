@@ -36,7 +36,8 @@ func main() {
 	}
 
 	passwordPolicies := processPasswordPolicies(inputs)
-	fmt.Println(getValidPasswords(passwordPolicies))
+	fmt.Println(getValidPasswords1(passwordPolicies))
+	fmt.Println(getValidPasswords2(passwordPolicies))
 
 }
 
@@ -47,12 +48,28 @@ type PasswordPolicy struct {
 	password string
 }
 
-func getValidPasswords(inputs []PasswordPolicy) int {
+// checks occurence of char/letter should be >= min and <= max
+func getValidPasswords1(inputs []PasswordPolicy) int {
 	count := 0
 
 	for _, policy := range inputs {
 		occurence := strings.Count(policy.password, policy.char)
 		if occurence >= policy.min && occurence <= policy.max {
+			count++
+		}
+	}
+
+	return count
+}
+
+// checks exactly one position has the char/letter in the policy
+func getValidPasswords2(inputs []PasswordPolicy) int {
+	count := 0
+
+	for _, policy := range inputs {
+		firstPosChar := policy.password[policy.min-1]
+		secondPosChar := policy.password[policy.max-1]
+		if (string(firstPosChar) == policy.char) != (string(secondPosChar) == policy.char) {
 			count++
 		}
 	}
