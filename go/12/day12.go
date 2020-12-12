@@ -37,10 +37,12 @@ func main() {
 		instructions = append(instructions, Instruction{rune(instruction[0]), value})
 	}
 
-	fmt.Println(manhattanDistance(instructions))
+	fmt.Println(manhattanDistance1(instructions))
+	fmt.Println(manhattanDistance2(instructions))
+
 }
 
-func manhattanDistance(instructions []Instruction) int {
+func manhattanDistance1(instructions []Instruction) int {
 	var heading, posX, posY int
 
 	for _, instruction := range instructions {
@@ -68,6 +70,37 @@ func manhattanDistance(instructions []Instruction) int {
 			case 'S':
 				posY -= instruction.Value
 			}
+		}
+	}
+
+	return Abs(posX) + Abs(posY)
+}
+
+func manhattanDistance2(instructions []Instruction) int {
+	var posX, posY int
+	waypointX, waypointY := 10, 1
+
+	for _, instruction := range instructions {
+		switch instruction.Direction {
+		case 'N':
+			waypointY += instruction.Value
+		case 'S':
+			waypointY -= instruction.Value
+		case 'E':
+			waypointX += instruction.Value
+		case 'W':
+			waypointX -= instruction.Value
+		case 'L':
+			for i := 0; i < instruction.Value/90; i++ {
+				waypointX, waypointY = -waypointY, waypointX
+			}
+		case 'R':
+			for i := 0; i < instruction.Value/90; i++ {
+				waypointX, waypointY = waypointY, -waypointX
+			}
+		case 'F':
+			posX += instruction.Value * waypointX
+			posY += instruction.Value * waypointY
 		}
 	}
 
