@@ -26,20 +26,37 @@ func main() {
 	inputs := strings.Split(string(data), "\n")
 
 	timestamp, _ := strconv.Atoi(inputs[0])
-	busIDs := strings.Split(strings.ReplaceAll(inputs[1], ",x", ""), ",")
-	earliestBusID := 0
-	waitTime := math.MaxInt64
+	busIDs := strings.Split(inputs[1], ",")
+	earliestBusID := -1
+	earliestLeave := math.MaxInt64
 
-	fmt.Println(busIDs)
-	for _, busID := range busIDs {
+	ids := make(map[int]int)
+
+	for index, busID := range busIDs {
+		if busID == "x" {
+			continue
+		}
+
 		interval, _ := strconv.Atoi(busID)
-		minWaitTime := interval - (timestamp % interval)
+		ids[interval] = index
+		leaveTime := int(math.Ceil(float64(timestamp)/float64(interval))) * interval
 
-		if minWaitTime < waitTime {
-			waitTime = minWaitTime
+		if leaveTime < earliestLeave {
+			earliestLeave = leaveTime
 			earliestBusID = interval
 		}
 	}
 
-	fmt.Println(waitTime * earliestBusID)
+	fmt.Println((earliestLeave - timestamp) * earliestBusID)
+
+	timestamp2 := 0
+	product := 1
+	for k, v := range ids {
+		for (timestamp2+v)%k != 0 {
+			timestamp2 += product
+		}
+		product *= k
+	}
+
+	fmt.Println(timestamp2)
 }
