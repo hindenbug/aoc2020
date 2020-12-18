@@ -45,9 +45,16 @@ func main() {
 
 func tick(prev map[ConwayCube]bool) map[ConwayCube]bool {
 	next := make(map[ConwayCube]bool)
+	neighbourCount := make(map[ConwayCube]int)
 
 	for cube := range prev {
 		activeNeighbours := cube.countActiveNeighbours(prev)
+
+		for _, neighbour := range c.neighbours() {
+			if prev[neighbour] {
+				activeNeighbors++
+			}
+		}
 		if (activeNeighbours == 2) || (activeNeighbours == 3) {
 			next[cube] = true
 		}

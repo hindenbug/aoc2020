@@ -16,35 +16,40 @@ func main() {
 	}
 
 	numbers := strings.Split(string(data), ",")
+	gameMap, last := prepData(numbers)
+	fmt.Println(solve(gameMap, last, 2020))
 
-	fmt.Println(solve(prepData(numbers), 2020))
-	fmt.Println(solve(prepData(numbers), 30000000))
+	gameMap, last = prepData(numbers)
+	fmt.Println(solve(gameMap, last, 30000000))
 
 }
 
-func prepData(numbers []string) map[int]int {
+func prepData(numbers []string) (map[int]int, int) {
 	gameMap := make(map[int]int)
 
-	for turn, val := range numbers {
+	for turn, val := range numbers[:len(numbers)-1] {
 		number, _ := strconv.Atoi(val)
 		gameMap[number] = turn + 1
 	}
 
-	return gameMap
+	last, _ := strconv.Atoi(numbers[len(numbers)-1])
+
+	return gameMap, last
 }
 
-func solve(gameMap map[int]int, cycles int) int {
-	var nextNumber int
+func solve(gameMap map[int]int, last int, cycles int) int {
+	var next int
 
 	for turn := len(gameMap) + 1; turn < cycles; turn++ {
-		if val, ok := gameMap[nextNumber]; ok {
-			gameMap[nextNumber] = turn
-			nextNumber = turn - val
+		if val, ok := gameMap[last]; ok {
+			next = turn - val
 		} else {
-			gameMap[nextNumber] = turn
-			nextNumber = 0
+			next = 0
 		}
+
+		gameMap[last] = turn
+		last = next
 	}
 
-	return nextNumber
+	return next
 }
